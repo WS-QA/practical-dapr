@@ -1,0 +1,87 @@
+type CatalogProductDto {
+  category: CategoryDto!
+  description: String
+  id: Uuid!
+  imageUrl: String!
+  inventory: InventoryDto!
+  name: String!
+  price: Float!
+}
+
+input CatalogProductDtoFilter {
+  AND: [CatalogProductDtoFilter!]
+  name: String
+  name_contains: String
+  OR: [CatalogProductDtoFilter!]
+  price: Float
+  price_gte: Float
+  price_lte: Float
+}
+
+input CatalogProductDtoSort {
+  name: SortOperationKind
+  price: SortOperationKind
+}
+
+type CategoryDto {
+  id: Uuid!
+  name: String!
+}
+
+input CreateProductInput {
+  categoryId: Uuid!
+  description: String
+  imageUrl: String!
+  inventoryId: Uuid!
+  name: String!
+  price: Float!
+}
+
+input DeleteProductInput {
+  id: Uuid!
+}
+
+type InventoryDto {
+  description: String
+  id: Uuid!
+  location: String!
+  website: String!
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): CatalogProductDto!
+  deleteProduct(deleteProductInput: DeleteProductInput!): Boolean!
+  updateProduct(updateProductInput: UpdateProductInput!): CatalogProductDto!
+}
+
+type OffsetPagingOfCatalogProductDto {
+  # A list of edges.
+  edges: [CatalogProductDto]
+  totalCount: Int!
+}
+
+type Query {
+  categories: [CategoryDto!]!
+  inventories: [InventoryDto!]!
+  products(
+    order_by: CatalogProductDtoSort
+    page: Int
+    pageSize: Int
+    where: CatalogProductDtoFilter
+  ): OffsetPagingOfCatalogProductDto
+}
+
+enum SortOperationKind {
+  ASC
+  DESC
+}
+
+input UpdateProductInput {
+  categoryId: Uuid!
+  description: String
+  id: Uuid!
+  imageUrl: String!
+  inventoryId: Uuid!
+  name: String!
+  price: Float!
+}
